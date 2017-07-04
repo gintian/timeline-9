@@ -255,6 +255,9 @@ body {
 		padding-left: 5%;
 		margin-right: auto;
 	}
+  .eventsInput{
+      flex-direction: column;
+  }
 }
 
 /* INPUTS */
@@ -279,6 +282,10 @@ header p{
   display: flex;
 }
 .message{
+  color:red;
+  font-size: 13px;
+}
+.error{
   color:red;
 }
 

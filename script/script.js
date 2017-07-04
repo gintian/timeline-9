@@ -139,7 +139,7 @@ $(document).ready(function(){
     var y = d.getFullYear();
     var m = d.getMonth();
     var day = d.getDate();
-    return (twoNum(day) + "." + twoNum(m) + "." + y);
+    return (twoNum(day) + "." + twoNum(m+1) + "." + y);
     console.log(eventDate);
     
   }
@@ -191,14 +191,7 @@ $(document).ready(function(){
     return date.getFullYear() + "-" + twoNum(date.getMonth()+1) + "-" + twoNum(date.getDate())
   }
   
-  // set date from inputs to dates
-  
-  function dateFromInputs(name, date){
-    name.setFullYear = date.substring(0,3)
-    name.setMonth = date.substring(5,6)
-    name.setDate = date.substring(8,9)
-    
-  }
+
   
   // set date in inputs
   $(".startDateInp").val(dateForInputs(startDate));
@@ -210,41 +203,101 @@ $(document).ready(function(){
   $(".eventInp").each(function(i){$(this).val(dateForInputs(getDateFromEvents(events[i][0]))); i++});
   
   $(".startDateInp").change(function(){
-    startDate = new Date($(this).val());
-    refreshTimeLine();
+    if ($(".startDateInp").val() > $(".currentDateInp").val() || $(".startDateInp").val() > $(".endDateInp").val() || Date.parse($(".startDateInp").val()) > smallestDate ){
+      $(".message").text("error start date");
+     
+      $(this).prev().addClass("error");
+    } else {   
+      $(this).prev().removeClass("error")
+      if ($(".error").length == 0){
+      $(".message").empty();
+      refreshTimeLine();
+      }
+    }
+      
+    
     
   })  
   
   $(".endDateInp").change(function(){
-    endDate = new Date($(this).val());
-    refreshTimeLine();
+    if ($(".endDateInp").val() < $(".currentDateInp").val() || $(".endDateInp").val() < $(".startDateInp").val() || Date.parse($(".endDateInp").val()) < biggestDate){
+      $(".message").text("error end date");
+      //$(".endDateInp").val(dateForInputs(endDate));
+      $(this).prev().addClass("error");
+    } else {   
+      $(this).prev().removeClass("error")
+      if ($(".error").length == 0){
+      $(".message").empty();
+        refreshTimeLine();
+      }
+      }
+    
   })
   
   $(".currentDateInp").change(function(){
-    today = new Date($(this).val());
-    refreshTimeLine();
+    if ($(".currentDateInp").val() < $(".startDateInp").val() || $(".currentDateInp").val() > $(".endDateInp").val()){
+      $(".message").text("error current date");
+      $(this).prev().addClass("error")
+      //$(".currentDateInp").val(dateForInputs(today));
+    } else {   
+      $(this).prev().removeClass("error")
+      if ($(".error").length == 0){
+      $(".message").empty();
+      //today = new Date($(this).val());
+        refreshTimeLine();
+      }
+      }
+      
+    
   })  
   
-  $(".eventInp").change(function(){
-    today = new Date($(this).val());
-    refreshTimeLine();
-    changeData();
+  $(".eventInp").each(function(){$(this).change(function(){
+    var $this = $(this)
+    if ($this.val() < $(".startDateInp").val() || $this.val() > $(".endDateInp").val()){
+      $(".message").text("error event date");
+      $this.prev().addClass("error")
+      //$(".currentDateInp").val(dateForInputs(today));
+    } else {   
+      $this.prev().removeClass("error")
+
+      //today = new Date($(this).val());
+      }
+    if ($(".error").length == 0){
+            $(".message").empty();
+          refreshTimeLine();
+          changeData();
+      
+    }
+
+  })
   })
   
+  var biggestDate = "";
+  var smallestDate = Date.parse($(".currentDateInp").val());
+  
+  function biggestDateFunc(){
+    $(".eventInp").each(function(){
+      if(Date.parse($(this).val()) > biggestDate){
+        biggestDate = Date.parse($(this).val());
+      }
+    })
+   }
+  
+  function smallestDateFunc(){
+    $(".eventInp").each(function(){
+      if(Date.parse($(this).val()) < smallestDate){
+        smallestDate = Date.parse($(this).val());
+      }
+    })
+    
+  }
+      
   function setOrder(){
     $(".eventPoint").each(function(i){
       $(this).css("order", i+1); i++
       })
   }
   
-  function sortOrder(a,b){
-    Data.parse($(".eventInp:eq("+a+")").val()) > Data.parse($(".eventInp:eq("+b+")").val()) ?
-      1 : -1;
-  }
-  
-  // WARUNKI DAT
-  
- 
   
   
   function refreshTimeLine(){
@@ -252,6 +305,8 @@ $(document).ready(function(){
     progressBar();
     doneClass();
     setOrder();
+    biggestDateFunc();
+    smallestDateFunc();
 
   }
   refreshTimeLine()
