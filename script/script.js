@@ -276,19 +276,23 @@ $(document).ready(function(){
   var smallestDate = Date.parse($(".currentDateInp").val());
   
   function biggestDateFunc(){
+    var myBiggestDate = "";
     $(".eventInp").each(function(){
-      if(Date.parse($(this).val()) > biggestDate){
-        biggestDate = Date.parse($(this).val());
+      if(Date.parse($(this).val()) > myBiggestDate){
+        myBiggestDate = Date.parse($(this).val());
       }
     })
+    biggestDate = myBiggestDate;
    }
   
   function smallestDateFunc(){
+    var mySmallestDate = Date.parse($(".eventInp:first").val());
     $(".eventInp").each(function(){
-      if(Date.parse($(this).val()) < smallestDate){
-        smallestDate = Date.parse($(this).val());
+      if(Date.parse($(this).val()) < mySmallestDate){
+        mySmallestDate = Date.parse($(this).val());
       }
     })
+    smallestDate = mySmallestDate
     
   }
       
