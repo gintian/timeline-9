@@ -292,19 +292,11 @@ $(document).ready(function(){
     
   }
       
-  function setOrder(){
-    $(".eventPoint").each(function(i){
-      $(this).css("order", i+1); i++
-      })
-  }
-  
-  
   
   function refreshTimeLine(){
     setIconsPlace();
     progressBar();
     doneClass();
-    setOrder();
     biggestDateFunc();
     smallestDateFunc();
 
