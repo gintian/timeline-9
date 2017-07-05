@@ -61,8 +61,6 @@ $(document).ready(function(){
 			eventDate.setMonth(date.substring(placeOfDots[0]+1,placeOfDots[1])-1);
 			eventDate.setYear(date.substring((placeOfDots[1])+1,date.length));
 		
-		//var eventDateParse = Date.parse(eventDate);
-		
 		return eventDate;
 	}
 	
@@ -108,8 +106,8 @@ $(document).ready(function(){
 		$(".date:last").html("<p>" + events[i][0] + "</p>");
 		$(".name:last").html("<p>" + events[i][1] + "</p>");
 		
-		// add done class for past events - CHANGE FOR DONECLASS WHEN EVENTDATE AND CURRENT DATE IS EQUAL
-		if (Date.parse(getDateFromEvents(events[i][0])) < todayParse){
+		// add done class for past events - 
+		if (Date.parse($(".eventInp:eq("+i+")").val()) < $(".currentDateInp").val(dateForInputs(today))){
 			$(".timePoint:last").addClass("done");
 		}
 		
@@ -120,7 +118,10 @@ $(document).ready(function(){
   
   function doneClass(){
     for(i=0;i<events.length;i++){
-      if(Date.parse($(".eventInp:eq("+i+")").val()) < Date.parse($(".currentDateInp").val())){
+      
+      // CHANGE FOR ADD DONECLASS WHEN EVENTDATE AND CURRENT DATE IS EQUAL OR NOT
+      
+      if(Date.parse($(".eventInp:eq("+i+")").val()) <= Date.parse($(".currentDateInp").val())){
         $(".timePoint:eq("+i+")").addClass("done");
       } else {
         $(".timePoint:eq("+i+")").removeClass("done");
